@@ -1,11 +1,11 @@
 @echo off
 setlocal
 
-set _token=NaO6N1t8FJBOoAOi78xj2BDdBDEkG67xDS9zKtMc
+set _token=EXAMPLE
 set _ipsource=ifconfig.co
-set _zonename=thepirate42.org
-set _recordname4=thepirate42.org
-set _recordname6=thepirate42.org
+set _zonename=zone.example
+set _recordname4=zone.example
+set _recordname6=zone.example
 
 :startloop
 echo:
