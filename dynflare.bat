@@ -11,10 +11,8 @@ set _recordname6=zone.example
 echo:
 echo:
 setlocal
-call :checkip _ipv4valid "%_currentipv4%"
-call :checkip _ipv6valid "%_currentipv6%"
-if False==%_ipv4valid% call :message "ERROR: IPv4 was not retrieved." & set _currentipv4=error
-if False==%_ipv6valid% call :message "ERROR: IPv6 was not retrieved." & set _currentipv6=error
+call :obtainip _currentipv4 4
+call :obtainip _currentipv6 6
 (for /L %%g in (1,1,2) do set /P "_cacheipv4=") < "%~dp0dynflare.cache"
 (for /L %%g in (1,1,3) do set /P "_cacheipv6=") < "%~dp0dynflare.cache"
 set _changed4=1
@@ -60,9 +58,12 @@ goto :eof
 
 :obtainip
 setlocal
-for /F "tokens=*" %%g in ('curl -4 -sS %_ipsource%') do (set _currentipv4=%%g)
-for /F "tokens=*" %%g in ('curl -6 -sS %_ipsource%') do (set _currentipv6=%%g)
-endlocal
+set _var=%1
+set _ipversion=%2
+for /F "tokens=*" %%g in ('curl -%_ipversion% -sS %_ipsource%') do (set _currentip=%%g)
+call :checkip _ipvalid "%_currentip%"
+if False==%_ipvalid% call :message "ERROR: IPv%_ipversion% was not retrieved." & set _currentip=error
+endlocal & set %_var%=%_currentip%
 goto :eof
 
 :updaterecord
