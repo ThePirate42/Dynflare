@@ -1,11 +1,8 @@
 @echo off
 setlocal
 
-set _token=EXAMPLE
-set _ipsource=ifconfig.co
-set _zonename=zone.example
-set _recordname4=zone.example
-set _recordname6=zone.example
+if NOT exist "%~dp0dynflare.conf" echo dynflare.conf not found! & call :message "ERROR: dynflare.conf wasn't found." & goto :stop
+for /F "tokens=* eol=#" %%g in (%~dp0dynflare.conf) do (call set %%g)
 
 :startloop
 echo:
